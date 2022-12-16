@@ -1,0 +1,66 @@
+from web3 import Web3
+from abis import (
+    weth_abi,
+    lending_pool_addresses_provider_abi,
+    lending_pool_abi,
+    erc20_abi,
+    price_feed_abi,
+)
+
+provider = ''
+web3 = Web3(Web3.HTTPProvider(provider))
+
+account_1 = ''
+private_key1 = ''
+account_2 = ''
+private_key2 = ''
+weth_address = Web3.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6")
+weth = web3.eth.contract(address=weth_address, abi=weth_abi)
+
+#AaveAbi = [{"inputs":[{"internalType":"string","name":"marketId","type":"string"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":False,"internalType":"bytes32","name":"id","type":"bytes32"},{"indexed":True,"internalType":"address","name":"newAddress","type":"address"},{"indexed":False,"internalType":"bool","name":"hasProxy","type":"bool"}],"name":"AddressSet","type":"event"},{"anonymous":False,"inputs":[{"indexed":True,"internalType":"address","name":"newAddress","type":"address"}],"name":"ConfigurationAdminUpdated","type":"event"},{"anonymous":False,"inputs":[{"indexed":True,"internalType":"address","name":"newAddress","type":"address"}],"name":"EmergencyAdminUpdated","type":"event"},{"anonymous":False,"inputs":[{"indexed":True,"internalType":"address","name":"newAddress","type":"address"}],"name":"LendingPoolCollateralManagerUpdated","type":"event"},{"anonymous":False,"inputs":[{"indexed":True,"internalType":"address","name":"newAddress","type":"address"}],"name":"LendingPoolConfiguratorUpdated","type":"event"},{"anonymous":False,"inputs":[{"indexed":True,"internalType":"address","name":"newAddress","type":"address"}],"name":"LendingPoolUpdated","type":"event"},{"anonymous":False,"inputs":[{"indexed":True,"internalType":"address","name":"newAddress","type":"address"}],"name":"LendingRateOracleUpdated","type":"event"},{"anonymous":False,"inputs":[{"indexed":False,"internalType":"string","name":"newMarketId","type":"string"}],"name":"MarketIdSet","type":"event"},{"anonymous":False,"inputs":[{"indexed":True,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":True,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":False,"inputs":[{"indexed":True,"internalType":"address","name":"newAddress","type":"address"}],"name":"PriceOracleUpdated","type":"event"},{"anonymous":False,"inputs":[{"indexed":False,"internalType":"bytes32","name":"id","type":"bytes32"},{"indexed":True,"internalType":"address","name":"newAddress","type":"address"}],"name":"ProxyCreated","type":"event"},{"inputs":[{"internalType":"bytes32","name":"id","type":"bytes32"}],"name":"getAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getEmergencyAdmin","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getLendingPool","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getLendingPoolCollateralManager","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getLendingPoolConfigurator","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getLendingRateOracle","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getMarketId","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getPoolAdmin","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getPriceOracle","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"id","type":"bytes32"},{"internalType":"address","name":"newAddress","type":"address"}],"name":"setAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"id","type":"bytes32"},{"internalType":"address","name":"implementationAddress","type":"address"}],"name":"setAddressAsProxy","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"emergencyAdmin","type":"address"}],"name":"setEmergencyAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"manager","type":"address"}],"name":"setLendingPoolCollateralManager","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"configurator","type":"address"}],"name":"setLendingPoolConfiguratorImpl","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"pool","type":"address"}],"name":"setLendingPoolImpl","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"lendingRateOracle","type":"address"}],"name":"setLendingRateOracle","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"marketId","type":"string"}],"name":"setMarketId","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"admin","type":"address"}],"name":"setPoolAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"priceOracle","type":"address"}],"name":"setPriceOracle","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+AaveAddressProvider = "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5"
+
+
+def send(balance, to, privateKey):
+
+    nonce = web3.eth.getTransactionCount(to)
+    gas = 2000000
+    gasprice = web3.toWei('16', 'gwei')
+
+    tx = {
+        'nonce': nonce,
+        'to': to,
+        'value': web3.toWei(balance,'ether'),
+        'gas': gas,
+        'gasPrice': gasprice
+    }
+    signed_tx = web3.eth.account.sign_transaction(tx, privateKey)
+    tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
+    return (web3.toHex(tx_hash))
+
+def balance(account):
+    return (web3.fromWei(web3.eth.getBalance(account),'ether'))
+
+
+def get_weth(account, privateKey, amount, chainId):
+    nonce = web3.eth.getTransactionCount(account)
+    weth_address = Web3.toChecksumAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6")
+    weth = web3.eth.contract(address=weth_address, abi=weth_abi)
+    function_call = weth.functions.deposit()
+    transaction = function_call.buildTransaction(
+        {
+            "chainId": chainId,
+            "from": account,
+            "nonce": nonce,
+            "value": amount,
+        }
+    )
+    signed_txn = web3.eth.account.sign_transaction(
+        transaction, private_key= privateKey
+    )
+    tx_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
+    print(f"tx hash: {tx_hash.hex()}")
+    web3.eth.wait_for_transaction_receipt(tx_hash)
+    return tx_hash
+
+print(web3.fromWei(weth.functions.balanceOf(account_2).call(),'ether'))
