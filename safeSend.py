@@ -4,10 +4,13 @@ import os
 from keySign import encrypt, sign, updateenv
 load_dotenv()
 
-
-def send(fromKeys, fromAddress, toAddress, amount):
+def send(fromKeys, toAddress, amount, incGas = False):
+    sw=web3.eth.account.from_key(fromKeys)
+    fromAddress=sw.address
     nonce = web3.eth.getTransactionCount(fromAddress)
     estimate = web3.eth.estimateGas({'to': toAddress, 'from': fromAddress, 'value': amount})
+    if incGas == True:
+        amount -= (web3.eth.estimateGas({'to': toAddress, 'from': fromAddress, 'value': amount}))*web3.eth.gas_price
     tx = {
         'nonce': nonce,
         'to': toAddress,
@@ -19,17 +22,18 @@ def send(fromKeys, fromAddress, toAddress, amount):
     tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
     return(web3.toHex(tx_hash))
 
-def encSend(slices, fromAddress, toAddress, amount, envvars, incGas = False):
+def encSend(slices, toAddress, amount, envvars, incGas = False):
     key = sign(slices)
+    sw=web3.eth.account.from_key(key)
+    fromAddress=sw.address
     slices = encrypt(key)
     updateenv(slices,envvars)
-
-    if incGas == True:
-        amount -= (web3.eth.estimateGas({'to': toAddress, 'from': fromAddress, 'value': amount}))*web3.eth.gas_price
-    ret = send(key, fromAddress, toAddress, amount)
+    ret = send(key, toAddress, amount, incGas)
     return ret
 
-def senderc20(fromKey, address, toAddress, fromAddress, amount, chainid):
+def senderc20(fromKey, address, toAddress, amount, chainid):
+    sw=web3.eth.account.from_key(fromKey)
+    fromAddress=sw.address
     abi = [
         {
         "constant": False,
@@ -58,9 +62,9 @@ def senderc20(fromKey, address, toAddress, fromAddress, amount, chainid):
     hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
     return(web3.toHex(hash))
 
-def safeSendErc20(slices, tokenAddress, toAddress,fromAddress,amount,chainid, envvars):
+def safeSendErc20(slices, tokenAddress, toAddress,amount,chainid, envvars):
     key = sign(slices)
     ss = encrypt(key)
     updateenv(ss,envvars)
-    ret = senderc20(key,tokenAddress,toAddress,fromAddress,amount,chainid)
+    ret = senderc20(key,tokenAddress,toAddress,amount,chainid)
     return ret
