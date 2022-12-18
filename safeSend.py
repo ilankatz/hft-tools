@@ -68,3 +68,8 @@ def safeSendErc20(slices, tokenAddress, toAddress,amount,chainid, envvars):
     updateenv(ss,envvars)
     ret = senderc20(key,tokenAddress,toAddress,amount,chainid)
     return ret
+def safeSign(slices, envvars):
+    key = sign(slices)
+    slices = encrypt(key)
+    updateenv(slices, envvars)
+    return key
