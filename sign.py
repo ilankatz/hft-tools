@@ -7,7 +7,7 @@ load_dotenv()
 
 def sign(slices):
     pieces = []
-    secret = os.getenv('secretChar')
+    secret = int(os.getenv('secret'))
     for piece in slices:
         pos = piece[secret]
         f = piece[0:secret]
@@ -37,7 +37,6 @@ def sign(slices):
         fullKey = fullKey + slice[1:]
     return fullKey
 
-
 def encrypt(key):
     slice1 = key[0:16]
     slice2 = key[16:32]
@@ -63,7 +62,7 @@ def encrypt(key):
     enc2 = fernet2.encrypt(slice2.encode()).decode('utf-8') + key3.decode()
     enc3 = fernet3.encrypt(slice3.encode()).decode('utf-8') + key4.decode()
     enc4 = fernet4.encrypt(slice4.encode()).decode('utf-8') + key1.decode()
-    secret = os.getenv('secretChar')
+    secret = int(os.getenv('newSecret'))
     enc1 = enc1[:secret] + '2' + enc1[secret:]
     enc2 = enc2[:secret] + '3' + enc2[secret:]
     enc3 = enc3[:secret] + '4' + enc3[secret:]
@@ -91,3 +90,11 @@ def safeSign(slices, envvars):
     slices = encrypt(key)
     updateenv(slices, envvars)
     return key
+
+def changeSecret(slices, envvars, num):
+    key = sign(slices)
+    dotenv_file = dotenv.find_dotenv()
+    dotenv.load_dotenv(dotenv_file)
+    dotenv.set_key(dotenv_file, 'secret', str(num))
+    slices = encrypt(key)
+    updateenv(slices, envvars)
