@@ -7,10 +7,11 @@ load_dotenv()
 
 def sign(slices):
     pieces = []
+    secret = os.getenv('secretChar')
     for piece in slices:
-        pos = piece[88]
-        f = piece[0:88]
-        s = piece[89:]
+        pos = piece[secret]
+        f = piece[0:secret]
+        s = piece[secret+1:]
         slice = pos + f + s
         pieces.append(slice)
     pieces.sort()
