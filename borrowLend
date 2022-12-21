@@ -26,7 +26,6 @@ def approve_erc20_goerli(erc20_address, spender, amount, privateKey, web3, nonce
     return web3.toHex(tx_hash)
 
 def deposit_to_aave_goerli(privateKey, depositAssetAddress, amount, lending_pool, web3, nonce=None):
-    print("Deposit started")
     account=web3.eth.account.from_key(privateKey).address
     lendCon = web3.eth.contract(address=lending_pool,abi=lending_pool_abi)
     nonce = nonce if nonce else web3.eth.getTransactionCount(account)
@@ -54,7 +53,6 @@ def deposit_to_aave_goerli(privateKey, depositAssetAddress, amount, lending_pool
             "nonce": nonce,
         }
     )
-    print("Withdraw begun")
     signed_txn = web3.eth.account.sign_transaction(
         tx, private_key=privateKey
     )
@@ -98,7 +96,6 @@ def repayAave_goerli(privateKey, amount, lendPool, web3, erc20_address=None, non
             "nonce": nonce + 1,
         }
     )
-    print("Repaying...")
     signed_txn = web3.eth.account.sign_transaction(
         tx, private_key=privateKey
     )
