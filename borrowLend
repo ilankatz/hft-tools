@@ -42,3 +42,21 @@ def deposit_to_aave_goerli(privateKey, depositAssetAddress, amount, lending_pool
     )
     tx_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
     return web3.toHex(tx_hash)
+    
+   def withdrawAave_goerli(privateKey, amount,lendPool, erc20,web3, nonce = None):
+    account=web3.eth.account.from_key(privateKey).address
+    nonce = nonce if nonce else web3.eth.getTransactionCount(account)
+    lendCon = web3.eth.contract(address=lendPool,abi=lending_pool_abi)
+    tx = lendCon.functions.withdraw(erc20, amount, account).buildTransaction(
+        {
+            "chainId": 5,
+            "from": account,
+            "nonce": nonce,
+        }
+    )
+    print("Withdraw begun")
+    signed_txn = web3.eth.account.sign_transaction(
+        tx, private_key=privateKey
+    )
+    tx_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
+    return web3.toHex(tx_hash)
