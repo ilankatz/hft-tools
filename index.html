@@ -36,10 +36,57 @@
       </div>
     </div>
     <div class="container">
-        <button class="button" id="aaveButton">
-            Deposit
-        </button>
+      <label for="depositAmount">Amount of Dai to deposit:</label>
+      <input type="number" id="depositAmount" name="depositAmount" min="0" placeholder = "1.0"></input>
+
+      <button class="button" id="depositButton">
+          Deposit
+      </button>
     </div>
+    <div class="container">
+      <label for="borrowAmount">Amount of Dai to borrow:</label>
+      <input type="number" id="borrowAmount" name="borrowAmount" min="0" placeholder = "1.0"></input>
+
+      Rate
+      <label class="switch">
+        <input type="checkbox" id="borrowRateToggle">
+        <div class="slider round">
+         <span class="on">Stable</span>
+         <span class="off">Variable</span>
+        </div>
+       </label>
+
+
+      <button class="button" id="borrowButton">
+          Borrow
+      </button>
+    </div>
+    <div class="container">
+      <label for="repayAmount">Amount of Dai to repay:</label>
+      <input type="number" id="repayAmount" name="repayAmount" min="0" placeholder = "1.0"></input>
+
+      Rate
+      <label class="switch">
+        <input type="checkbox" id="repayRateToggle">
+        <div class="slider round">
+         <span class="on">Stable</span>
+         <span class="off">Variable</span>
+        </div>
+       </label>
+
+      <button class="button" id="repayButton">
+          Repay
+      </button>
+    </div>
+    <div class="container">
+      <label for="withdrawAmount">Amount of Dai to withdraw:</label>
+      <input type="number" id="withdrawAmount" name="withdrawAmount" min="0" placeholder = "1.0"></input>
+
+      <button class="button" id="withdrawButton">
+          Withdraw
+      </button>
+    </div>
+
 
     <div class="alert" id="installAlert">
       Please refresh your browser after installing the Metamask plugin

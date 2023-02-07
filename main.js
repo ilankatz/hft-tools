@@ -1,4 +1,4 @@
-const provider = "https://goerli.infura.io/v3/19422f0b6f114fcea2b8b0b8d480728e" //node provider
+const provider = "" //node provider
 web3 = new Web3(new Web3.providers.HttpProvider(provider)) //instatiate web3 object
 
 const aaveGoerliDai_address = "0x75Ab5AB1Eef154C0352Fc31D2428Cef80C7F8B33" //goerli chain address for Dai tokens used by Aave
@@ -12,7 +12,10 @@ const walletID = document.getElementById("walletID");
 const reloadButton = document.getElementById("reloadButton");
 const installAlert = document.getElementById("installAlert");
 const mobileDeviceWarning = document.getElementById("mobileDeviceWarning");
-const depositButton = document.getElementById("aaveButton")
+const depositButton = document.getElementById("depositButton")
+const depositAmount = document.getElementById("depositAmount")
+const borrowButton = document.getElementById("borrowButton")
+const borrowAmount = document.getElementById("borrowAmount")
 
 const startLoading = () => {
   connectButton.classList.add("loadingButton");
@@ -82,27 +85,155 @@ reloadButton.addEventListener("click", () => {
 depositButton.addEventListener("click", () => {
     console.log("Deposit Button Clicked");
 
-    const amount = new BN(10).pow(BN(19))
+    //const amount = new BN(10).pow(BN(19))
+    const amount = new BN(depositAmount.value).mul(BN(10).pow(BN(18))) //raise it to 19th power so that we're dealing with whole number dai
 
-    approveAave(amount);
-    
-    
+    console.log("amount = " + amount)
+
+    approveAndDepositAave(amount);
 });
 
-async function approveAave(amount) {
-    const poolAddress = await get_goerli_lending_pool(web3) //may need to be placed in asynchronous function so we can add await statement
+borrowButton.addEventListener("click", () => {
+  console.log("Borrow Button Clicked");
+
+  const amount = new BN(borrowAmount.value).mul(BN(10).pow(BN(18))) //raise it to 19th power so that we're dealing with whole number dai
+
+  console.log("amount = " + amount)
+
+  borrowAave(amount);
+});
+
+repayButton.addEventListener("click", () => {
+  console.log("Repay Button Clicked");
+  const amount = new BN(repayAmount.value).mul(BN(10).pow(BN(18))) //raise it to 19th power so that we're dealing with whole number dai
+
+  console.log("amount = " + amount)
+
+  approveAndRepayAave(amount);
+});
+
+withdrawButton.addEventListener("click", () => {
+  console.log("Withdraw Button Clicked");
+
+  const amount = new BN(withdrawAmount.value).mul(BN(10).pow(BN(18))) //raise it to 19th power so that we're dealing with whole number dai
+
+  console.log("amount = " + amount)
+
+  withdrawAave(amount);
+});
+
+async function approveAndRepayAave(amount) {
+  const poolAddress = await get_goerli_lending_pool(web3) 
+  await approveAave(amount, poolAddress)
+  repayAave(amount, poolAddress)
+}
+
+async function approveAndDepositAave(amount) {
+  const poolAddress = await get_goerli_lending_pool(web3) 
+  await approveAave(amount, poolAddress)
+  depositAave(amount, poolAddress)
+}
+
+async function approveAave(amount, poolAddress) {
+    //const poolAddress = await get_goerli_lending_pool(web3) 
+    //const gasPrice = await web3.eth.getGasPrice()
+    const data = dai_contract.methods.approve(poolAddress, amount).encodeABI()
+
     //create a transaction to send to the blockchain for approving the funds
     const transactionParameters = {
-      gasPrice: '0x09184e72a000',
-      gas: '0x27100',
       to: aaveGoerliDai_address,
       from: ethereum.selectedAddress,
-      data: dai_contract.methods.approve(poolAddress, amount).encodeABI(),
+      data: data,
     }
     ethereum.request({ 
         method: "eth_sendTransaction",
         params: [transactionParameters],
     })
+}
+
+async function depositAave(amount, poolAddress) {
+  //const gasPrice = await web3.eth.getGasPrice()
+  const lendCon = new web3.eth.Contract(lending_pool_abi,poolAddress)
+  const data = lendCon.methods.deposit(aaveGoerliDai_address, amount, ethereum.selectedAddress, 0).encodeABI()
+  
+  const transactionParameters = {
+    from: ethereum.selectedAddress,
+    to: poolAddress,
+    data: data,
+  }
+
+  ethereum.request({ 
+    method: "eth_sendTransaction",
+    params: [transactionParameters],
+  })
+}
+
+async function borrowAave(amount) {
+  const poolAddress = await get_goerli_lending_pool(web3) 
+  var isChecked = document.getElementById("borrowRateToggle").checked;
+  var stableRate;
+  if (isChecked === false) {
+    stableRate = 2 //variable rate
+  }
+  else {
+    stableRate = 1 //stable rate
+  }
+
+  const lendCon = new web3.eth.Contract(lending_pool_abi,poolAddress)
+  const data = lendCon.methods.borrow(aaveGoerliDai_address, amount, stableRate, 0, ethereum.selectedAddress).encodeABI()
+
+  const transactionParameters = {
+    from: ethereum.selectedAddress,
+    to: poolAddress,
+    data: data,
+  }
+
+  ethereum.request({ 
+    method: "eth_sendTransaction",
+    params: [transactionParameters],
+  })
+}
+
+async function repayAave(amount, poolAddress) {
+  const lendCon = new web3.eth.Contract(lending_pool_abi,poolAddress)
+  var isChecked = document.getElementById("borrowRateToggle").checked;
+  var stableRate;
+  if (isChecked === false) {
+    stableRate = 2 //variable rate
+  }
+  else {
+    stableRate = 1 //stable rate
+  }
+
+  const data = lendCon.methods.repay(aaveGoerliDai_address, amount, stableRate, ethereum.selectedAddress).encodeABI()
+
+  const transactionParameters = {
+    from: ethereum.selectedAddress,
+    to: poolAddress,
+    data: data,
+  }
+
+  ethereum.request({ 
+    method: "eth_sendTransaction",
+    params: [transactionParameters],
+  })
+}
+
+async function withdrawAave(amount) {
+  const poolAddress = await get_goerli_lending_pool(web3) 
+  const lendCon = new web3.eth.Contract(lending_pool_abi,poolAddress)
+  const data = lendCon.methods.withdraw(aaveGoerliDai_address, amount, ethereum.selectedAddress).encodeABI()
+  
+  const transactionParameters = {
+    from: ethereum.selectedAddress,
+    to: poolAddress,
+    data: data,
+  }
+
+  ethereum.request({ 
+    method: "eth_sendTransaction",
+    params: [transactionParameters],
+  })
 }
 
 //get lending pool function
