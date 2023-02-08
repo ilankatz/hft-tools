@@ -142,6 +142,27 @@ def userData_goerli(address, web3):
     lpapaddress = web3.toChecksumAddress("0x5E52dEc931FFb32f609681B8438A51c675cc232d")
     return uiCon.functions.getUserReservesData(lpapaddress,address).call()
 
+def getBorrowRates(asset, web3):
+    rate = 0
+    return rate
+def getHealthFactor():
+    return
+
+def get_borrowable_data(lending_pool, account, web3):
+   (
+       total_collateral_eth,
+       total_debt_eth,
+       available_borrow_eth,
+       current_liquidation_threshold,
+       tlv,
+       health_factor,
+   ) = lending_pool.getUserAccountData(account.address)
+   available_borrow_eth = web3.fromWei(available_borrow_eth, "ether")
+   total_collateral_eth = web3.fromWei(total_collateral_eth, "ether")
+   total_debt_eth = web3.fromWei(total_debt_eth, "ether")
+   return (float(available_borrow_eth), float(total_debt_eth))
+
+
 def repayAll_goerli(privateKey, web3, lendPool, nonce = None):
     account=web3.eth.account.from_key(privateKey).address
     nonce = nonce if nonce else web3.eth.getTransactionCount(account)
