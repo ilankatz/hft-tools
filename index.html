@@ -19,6 +19,34 @@
     <script type = "text/javascript" src="./abis.js"></script>
   </head>
   <body>
+    <div class="spacer"></div>
+    <div class="box-container">
+      <div class="account-info-container">
+        Account Info Stats: <br>
+        Health Ratio: <br>
+        Total Supply APY: <br>
+        Total Supplies: 
+      </div>
+    </div>
+    <div class="box-container">
+      <div class="market-box-container">
+        <div class="market-data-box" style="margin-right: 15px">
+          Your Supplies: <br>
+          supply 1 <br>
+          supply 2 <br>
+          supply 3 <br>
+          supply 4
+        </div>
+        <div class="market-data-box" style="margin-left: 15px">
+          Your Borrows: <br>
+          borrow 1 <br>
+          borrow 2 <br>
+          borrow 3 <br>
+          borrow 4
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <button class="button" id="connectButton">
         <img src="./images/metamask.png" alt="metamask logo" /> Connect wallet
@@ -33,6 +61,36 @@
       <div id="mobileDeviceWarning">
         If you are on a mobile phone, please use MetaMask application's browser
         to connect.
+      </div>
+    </div>
+    <div class="container">
+      <!-- <label for="withdrawAmount">Amount of Dai to withdraw:</label> -->
+      <button class="button" id="getAccountData">
+          Get Account Data
+      </button>
+      <div class="sameLineText">
+        <p>Available Borrows:</p>
+        <span id="accountAvailableBorrows">N/A</span>
+      </div>
+      <div class="sameLineText">
+        <p>Liquidation Threshold:</p>
+        <span id="accountLiquidationThreshold">N/A</span>
+      </div>
+      <div class="sameLineText">
+        <p>Health Factor:</p>
+        <span id="accountHealthFactor">N/A</span>
+      </div>
+      <div class="sameLineText">
+        <p>Locked Value:</p>
+        <span id="accountLoanToValue">N/A</span>
+      </div>
+      <div class="sameLineText">
+        <p>Collateral:</p>
+        <span id="accountCollateral">N/A</span>
+      </div>
+      <div class="sameLineText">
+        <p>Debt:</p>
+        <span id="accountDebt">N/A</span>
       </div>
     </div>
     <div class="container">

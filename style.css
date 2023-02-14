@@ -3,7 +3,18 @@ html, body {
     margin: 0;
     font-family: 'Quicksand', sans-serif;
     text-align: center;
-    background: #fafafa;
+    background: #1b1b1b;
+}
+
+body {
+  background: repeating-linear-gradient(
+    rgba(0,0,0,0.15),
+    rgba(0,0,0,0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  ), radial-gradient(
+    rgba(0, 150, 0, 0.75), black 120%
+  ); 
 }
 
 .container {
@@ -16,6 +27,56 @@ html, body {
     height: 20vh;
 }
 
+.spacer {
+  margin-top: 100px;
+}
+
+.box-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.box-container .market-box-container {
+  display: inline-flex;
+  margin: 20px 80px 20px;
+}
+
+.account-info-container {
+  border-radius: 15px;
+  background: #000000;
+  /* opacity: 0.5; */
+  margin: 20px 80px 20px;
+  border-color: rgb(39, 39, 39);
+  border-width: 2px;
+  border-style: solid;
+  color: white;
+  font: 1.3rem Inconsolata, monospace;
+  text-shadow: 0 0 5px #C8C8C8;
+}
+
+.market-data-box {
+  border-radius: 15px;
+  background: #000000;
+  /* opacity: 0.5; */
+  margin: 20px 80px 20px;
+  border-color: rgb(39, 39, 39);
+  border-width: 2px;
+  border-style: solid;
+  color: white;
+  font: 1.3rem Inconsolata, monospace;
+  text-shadow: 0 0 5px #C8C8C8;
+  margin: 0px;
+  text-align: center;
+  float: left;
+  width: 50%;
+}
+
+.sameLineText p {
+    display: inline;
+}
+
 .button {
     position: relative;
     display: flex;
@@ -24,7 +85,12 @@ html, body {
     border: none;
     outline: none;
     box-shadow: 0 1px 5px 0 #e6e9ef;
-    background: #ffffff;
+    background:repeating-linear-gradient(
+      rgba(0,0,0,0.15),
+      rgba(0,0,0,0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    ), #ffffff;
     color: #000;
     border-radius: 99px;
     padding: 16px 32px;
@@ -32,6 +98,7 @@ html, body {
     font-size: 24px;
     font-weight: 500;
     cursor: pointer;
+    
 }
 
 .switch {
@@ -50,7 +117,8 @@ html, body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #4c00ff;
+  background: #0BA7F0; 
+  background: linear-gradient(to right, #0051ff, #14b2fc);
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -68,7 +136,8 @@ html, body {
 }
 
 input:checked + .slider {
-  background-color: #cc00ff;
+  background: #4c00ff;
+  background: linear-gradient(to right, #b214fc, #4c00ff);
 }
 
 input:focus + .slider {

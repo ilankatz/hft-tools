@@ -1,4 +1,4 @@
-const provider = "" //node provider
+const provider = "https://goerli.infura.io/v3/19422f0b6f114fcea2b8b0b8d480728e" //node provider
 web3 = new Web3(new Web3.providers.HttpProvider(provider)) //instatiate web3 object
 
 const aaveGoerliDai_address = "0x75Ab5AB1Eef154C0352Fc31D2428Cef80C7F8B33" //goerli chain address for Dai tokens used by Aave
@@ -16,6 +16,7 @@ const depositButton = document.getElementById("depositButton")
 const depositAmount = document.getElementById("depositAmount")
 const borrowButton = document.getElementById("borrowButton")
 const borrowAmount = document.getElementById("borrowAmount")
+const getAccountDataButton = document.getElementById("getAccountData")
 
 const startLoading = () => {
   connectButton.classList.add("loadingButton");
@@ -120,6 +121,10 @@ withdrawButton.addEventListener("click", () => {
   console.log("amount = " + amount)
 
   withdrawAave(amount);
+});
+
+getAccountDataButton.addEventListener("click", () => {
+  get_borrowable_data(web3)
 });
 
 async function approveAndRepayAave(amount) {
@@ -242,4 +247,33 @@ async function get_goerli_lending_pool(web3) {
   const lpap = new web3.eth.Contract(lending_pool_addresses_provider_abi,lpapaddress)
   const lendPool = (lpap.methods.getLendingPool().call())
   return lendPool
+}
+
+async function get_borrowable_data(web3) {
+  const poolAddress = await get_goerli_lending_pool(web3) 
+  const lendCon = new web3.eth.Contract(lending_pool_abi,poolAddress)
+  /*(
+      total_collateral_eth,
+      total_debt_eth,
+      available_borrow_eth,
+      current_liquidation_threshold,
+      tlv,
+      health_factor,
+  ) = lending_pool.getUserAccountData(account.address)*/
+  const myData = await lendCon.methods.getUserAccountData(ethereum.selectedAddress).call()
+  console.log(myData)
+  let availableBorrows = myData["availableBorrowsETH"]/(10**18)
+  let liquidationThreshold = myData["currentLiquidationThreshold"]/100
+  let healthFactor = myData["healthFactor"]
+  let loanToValue = myData["ltv"]/100
+  let collateral = myData["totalCollateralETH"]/(10**18)
+  let debt = myData["totalDebtETH"]/(10**18)
+  
+  document.getElementById("accountAvailableBorrows").innerHTML = availableBorrows
+  document.getElementById("accountLiquidationThreshold").innerHTML = liquidationThreshold
+  document.getElementById("accountHealthFactor").innerHTML = healthFactor
+  document.getElementById("accountLoanToValue").innerHTML = loanToValue
+  document.getElementById("accountCollateral").innerHTML = collateral
+  document.getElementById("accountDebt").innerHTML = debt
+
 }
