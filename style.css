@@ -3,7 +3,6 @@ html, body {
     margin: 0;
     font-family: 'Quicksand', sans-serif;
     text-align: center;
-    background: #1b1b1b;
 }
 
 body {
@@ -17,6 +16,41 @@ body {
   ); 
 }
 
+header {
+  padding: 2em;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: #193b19;
+}
+
+.nav-list {
+  display: flex;
+  flex-flow: row nowrap;  
+  font: 1.3rem Inconsolata, monospace;
+  text-shadow: 0 0 5px #C8C8C8;
+}
+.nav-list li {
+  list-style-type: none;
+  margin-left: 40px;
+}
+.nav-list a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+}
+.nav-list a:hover {
+  color: rgb(255, 255, 255);
+  transition:.1s;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #073800, 0 0 40px #073800, 0 0 50px #073800, 0 0 60px #073800, 0 0 70px #073800;
+}
+.metamask-connect-item {
+  position: absolute;
+  margin-top: -12px;
+  right: 140px;
+}
+
+
 .container {
     position: relative;
     display: flex;
@@ -28,7 +62,7 @@ body {
 }
 
 .spacer {
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 .box-container {
@@ -56,7 +90,7 @@ body {
   text-shadow: 0 0 5px #C8C8C8;
 }
 
-.market-data-box {
+.your-market-data-box {
   border-radius: 15px;
   background: #000000;
   /* opacity: 0.5; */
@@ -73,32 +107,91 @@ body {
   width: 50%;
 }
 
+.all-market-data-box {
+  border-radius: 15px;
+  background: #000000;
+  /* opacity: 0.5; */
+  margin: 20px 80px 20px;
+  border-color: rgb(39, 39, 39);
+  border-width: 2px;
+  border-style: solid;
+  color: white;
+  font: 1.3rem Inconsolata, monospace;
+  text-shadow: 0 0 5px #C8C8C8;
+  margin: 0px;
+  text-align: center;
+  float: left;
+  width: 50%;
+}
+
+.table-container img {
+  width: 50px;
+}
+
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+table.sortable {
+  align-self: center;
+  width: 95%;
+  border: 1px solid;
+  border-color: #FFFFFF;
+}
+
+table.sortable thead, table.sortable tr, table.sortable td, table.sortable th {
+  border: 1px solid;
+  border-color: #FFFFFF
+}
+
+table.sortable thead {
+  color:#FFFFFF;
+  font-weight: bold;
+  cursor: default;
+  width: 100%
+}
+
+tbody > tr {
+  transition: background .3s;
+}
+
+tbody > tr:hover {
+  background:rgba(7, 75, 7, 0.75);
+  transition: .3s;
+}
+
 .sameLineText p {
     display: inline;
 }
 
-.button {
+.metamask-button {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     outline: none;
-    box-shadow: 0 1px 5px 0 #e6e9ef;
+    box-shadow: 0 0px 8px 0 #e6e9ef;
     background:repeating-linear-gradient(
       rgba(0,0,0,0.15),
       rgba(0,0,0,0.15) 1px,
       transparent 1px,
       transparent 2px
-    ), #ffffff;
+    ), #000000;
     color: #000;
     border-radius: 99px;
-    padding: 16px 32px;
+    padding: 4px 16px;
     font-family: 'Quicksand', sans-serif;
     font-size: 24px;
     font-weight: 500;
     cursor: pointer;
-    
+}
+
+.metamask-button:hover {
+  transition:.1s;
+  box-shadow: 0 0 10px #fff, 0 0 15px #fff;
 }
 
 .switch {
@@ -188,7 +281,7 @@ input:checked + .slider .off
 
 #connectButton img {
     width: 36px;
-    margin-right: 16px;
+    margin-right: 8px;
 }
 
 #depositButton {

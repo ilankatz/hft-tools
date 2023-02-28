@@ -1,158 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Connect MetaMask</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect MetaMask</title>
 
-    <link rel="stylesheet" href="./style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet" />
 
-    <script type = "text/javascript" src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script type = "text/javascript" src="./abis.js"></script>
-  </head>
-  <body>
-    <div class="spacer"></div>
-    <div class="box-container">
-      <div class="account-info-container">
-        Account Info Stats: <br>
-        Health Ratio: <br>
-        Total Supply APY: <br>
-        Total Supplies: 
-      </div>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css"
+    rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <script src="./sorttable.js"></script>
+
+  <link rel="stylesheet" href="./style.css" />
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script type="text/javascript" src="./abis.js"></script>
+
+  <script type="text/javascript" src="./fillTables.js"></script>
+  <script type="text/javascript" src="./getAaveDictionaryData.js"></script>
+  <script type="text/javascript" src="./getUserPositions.js"></script>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <ul class="nav-list">
+        <li><a href="/" title="Home">Home</a></li>
+        <li><a href="/music/" title="Music">Music</a></li>
+        <li><a href="/gallery/" title="Gallery">Gallery</a></li>
+        <li><a href="/feed/" title="Feed">Feed</a></li>
+        <li class="metamask-connect-item">
+          <button class="metamask-button" id="connectButton">
+            <img src="./images/metamask.png" alt="metamask logo" /> 
+            <div id="wallet-text">Connect wallet</div>
+      
+            <span id="loading"><span>&bull;</span><span>&bull;</span><span>&bull;</span></span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <div class="spacer">
+  </div>
+  <div class="box-container">
+    <div class="account-info-container">
+      <div id="health-factor">Health Factor: </div>
+      <div id="net-APY">Net APY: </div>
+      <div id="net-worth">Net Worth: </div>
     </div>
-    <div class="box-container">
-      <div class="market-box-container">
-        <div class="market-data-box" style="margin-right: 15px">
-          Your Supplies: <br>
-          supply 1 <br>
-          supply 2 <br>
-          supply 3 <br>
-          supply 4
+  </div>
+  <div class="box-container">
+    <div class="market-box-container">
+      <div class="your-market-data-box" style="margin-right: 15px">
+        <div style="margin-bottom: 15px">  Your Supplies: </div>
+        <div class="table-container">
+          <table class="sortable">
+            <thead>
+              <tr>
+                <th onclick="sortTable(0, this)" style="width: 20%;">Asset</th>
+                <th onclick="sortTable(1, this)" style="width: 40%;">Balance</th>
+                <th onclick="sortTable(2, this)" style="width: 40%;">APY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>A</td>
+                <td>Z</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>B</td>
+                <td>Y</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>C</td>
+                <td>X</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="market-data-box" style="margin-left: 15px">
-          Your Borrows: <br>
-          borrow 1 <br>
-          borrow 2 <br>
-          borrow 3 <br>
-          borrow 4
+        <br>
+      </div>
+      <div class="your-market-data-box" style="margin-left: 15px">
+        <div style="margin-bottom: 15px"> Your Borrows: </div>
+        <div class="table-container">
+          <table class="sortable">
+            <thead>
+              <tr>
+                <th onclick="sortTable(0, this)" style="width: 20%;">Asset</th>
+                <th onclick="sortTable(1, this)" style="width: 40%;">Balance</th>
+                <th onclick="sortTable(2, this)" style="width: 40%;">APY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>A</td>
+                <td>Z</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>B</td>
+                <td>Y</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>C</td>
+                <td>X</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <br>
       </div>
     </div>
-
-    <div class="container">
-      <button class="button" id="connectButton">
-        <img src="./images/metamask.png" alt="metamask logo" /> Connect wallet
-
-        <span id="loading"
-          ><span>&bull;</span><span>&bull;</span><span>&bull;</span></span
-        >
-      </button>
-
-      <div id="walletID">Your wallet is not connected yet.</div>
-
-      <div id="mobileDeviceWarning">
-        If you are on a mobile phone, please use MetaMask application's browser
-        to connect.
-      </div>
-    </div>
-    <div class="container">
-      <!-- <label for="withdrawAmount">Amount of Dai to withdraw:</label> -->
-      <button class="button" id="getAccountData">
-          Get Account Data
-      </button>
-      <div class="sameLineText">
-        <p>Available Borrows:</p>
-        <span id="accountAvailableBorrows">N/A</span>
-      </div>
-      <div class="sameLineText">
-        <p>Liquidation Threshold:</p>
-        <span id="accountLiquidationThreshold">N/A</span>
-      </div>
-      <div class="sameLineText">
-        <p>Health Factor:</p>
-        <span id="accountHealthFactor">N/A</span>
-      </div>
-      <div class="sameLineText">
-        <p>Locked Value:</p>
-        <span id="accountLoanToValue">N/A</span>
-      </div>
-      <div class="sameLineText">
-        <p>Collateral:</p>
-        <span id="accountCollateral">N/A</span>
-      </div>
-      <div class="sameLineText">
-        <p>Debt:</p>
-        <span id="accountDebt">N/A</span>
-      </div>
-    </div>
-    <div class="container">
-      <label for="depositAmount">Amount of Dai to deposit:</label>
-      <input type="number" id="depositAmount" name="depositAmount" min="0" placeholder = "1.0"></input>
-
-      <button class="button" id="depositButton">
-          Deposit
-      </button>
-    </div>
-    <div class="container">
-      <label for="borrowAmount">Amount of Dai to borrow:</label>
-      <input type="number" id="borrowAmount" name="borrowAmount" min="0" placeholder = "1.0"></input>
-
-      Rate
-      <label class="switch">
-        <input type="checkbox" id="borrowRateToggle">
-        <div class="slider round">
-         <span class="on">Stable</span>
-         <span class="off">Variable</span>
+  </div>
+  <div class="box-container">
+    <div class="market-box-container">
+      <div class="all-market-data-box" style="margin-right: 15px">
+        <div style="margin-bottom: 15px"> Supply Market: </div>
+        <div class="table-container">
+          <table class="sortable">
+            <thead>
+              <tr>
+                <th onclick="sortTable(0, this)" style="width: 20%;">Asset</th>
+                <th onclick="sortTable(1, this)" style="width: 40%;">Balance</th>
+                <th onclick="sortTable(2, this)" style="width: 40%;">APY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>A</td>
+                <td>Z</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>B</td>
+                <td>Y</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>C</td>
+                <td>X</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-       </label>
-
-
-      <button class="button" id="borrowButton">
-          Borrow
-      </button>
-    </div>
-    <div class="container">
-      <label for="repayAmount">Amount of Dai to repay:</label>
-      <input type="number" id="repayAmount" name="repayAmount" min="0" placeholder = "1.0"></input>
-
-      Rate
-      <label class="switch">
-        <input type="checkbox" id="repayRateToggle">
-        <div class="slider round">
-         <span class="on">Stable</span>
-         <span class="off">Variable</span>
+        <br>
+      </div>
+      <div class="all-market-data-box" style="margin-left: 15px">
+        <div style="margin-bottom: 15px"> Borrow Market: </div>
+        <div class="table-container">
+          <table class="sortable" id="market-borrow-table">
+            <thead>
+              <tr>
+                <th onclick="sortTable(0, this)" style="width: 20%;">Asset</th>
+                <th onclick="sortTable(1, this, true)" style="width: 40%;">Balance</th>
+                <th onclick="sortTable(2, this, true)" style="width: 40%;">APY</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
         </div>
-       </label>
-
-      <button class="button" id="repayButton">
-          Repay
-      </button>
+        <br>
+      </div>
     </div>
-    <div class="container">
-      <label for="withdrawAmount">Amount of Dai to withdraw:</label>
-      <input type="number" id="withdrawAmount" name="withdrawAmount" min="0" placeholder = "1.0"></input>
+  </div>
 
-      <button class="button" id="withdrawButton">
-          Withdraw
-      </button>
+    <div id="mobileDeviceWarning">
+      If you are on a mobile phone, please use MetaMask application's browser
+      to connect.
     </div>
-
-
-    <div class="alert" id="installAlert">
-      Please refresh your browser after installing the Metamask plugin
-
-      <button class="button" id="reloadButton">Reload page</button>
+  </div>
+  <div class="container">
+    <!-- <label for="withdrawAmount">Amount of Dai to withdraw:</label> -->
+    <button class="button" id="getAccountData">
+      Get Account Data
+    </button>
+    <div class="sameLineText">
+      <p>Available Borrows:</p>
+      <span id="accountAvailableBorrows">N/A</span>
     </div>
+    <div class="sameLineText">
+      <p>Liquidation Threshold:</p>
+      <span id="accountLiquidationThreshold">N/A</span>
+    </div>
+    <div class="sameLineText">
+      <p>Health Factor:</p>
+      <span id="accountHealthFactor">N/A</span>
+    </div>
+    <div class="sameLineText">
+      <p>Locked Value:</p>
+      <span id="accountLoanToValue">N/A</span>
+    </div>
+    <div class="sameLineText">
+      <p>Collateral:</p>
+      <span id="accountCollateral">N/A</span>
+    </div>
+    <div class="sameLineText">
+      <p>Debt:</p>
+      <span id="accountDebt">N/A</span>
+    </div>
+  </div>
+  <div class="container">
+    <label for="depositAmount">Amount of Dai to deposit:</label>
+    <input type="number" id="depositAmount" name="depositAmount" min="0" placeholder="1.0"></input>
 
-    <!-- <script type="text/javascript" src="./main.js"></script> -->
-    <script type="module" src="./main.js"></script>
-  </body>
+    <button class="button" id="depositButton">
+      Deposit
+    </button>
+  </div>
+  <div class="container">
+    <label for="borrowAmount">Amount of Dai to borrow:</label>
+    <input type="number" id="borrowAmount" name="borrowAmount" min="0" placeholder="1.0"></input>
+
+    Rate
+    <label class="switch">
+      <input type="checkbox" id="borrowRateToggle">
+      <div class="slider round">
+        <span class="on">Stable</span>
+        <span class="off">Variable</span>
+      </div>
+    </label>
+
+
+    <button class="button" id="borrowButton">
+      Borrow
+    </button>
+  </div>
+  <div class="container">
+    <label for="repayAmount">Amount of Dai to repay:</label>
+    <input type="number" id="repayAmount" name="repayAmount" min="0" placeholder="1.0"></input>
+
+    Rate
+    <label class="switch">
+      <input type="checkbox" id="repayRateToggle">
+      <div class="slider round">
+        <span class="on">Stable</span>
+        <span class="off">Variable</span>
+      </div>
+    </label>
+
+    <button class="button" id="repayButton">
+      Repay
+    </button>
+  </div>
+  <div class="container">
+    <label for="withdrawAmount">Amount of Dai to withdraw:</label>
+    <input type="number" id="withdrawAmount" name="withdrawAmount" min="0" placeholder="1.0"></input>
+
+    <button class="button" id="withdrawButton">
+      Withdraw
+    </button>
+  </div>
+
+
+  <div class="alert" id="installAlert">
+    Please refresh your browser after installing the Metamask plugin
+
+    <button class="button" id="reloadButton">Reload page</button>
+  </div>
+
+  <!-- <script type="text/javascript" src="./main.js"></script> -->
+  <script type="module" src="./main.js"></script>
+</body>
+
 </html>
