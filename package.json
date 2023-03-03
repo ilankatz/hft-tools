@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@bgd-labs/aave-address-book": "^1.18.0",
+    "bignumber": "^1.1.0",
+    "bn": "^1.0.5",
+    "ethereumjs-tx": "^2.1.2",
+    "web3": "^1.8.1"
+  },
+  "devDependencies": {
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  }
+}

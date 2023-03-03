@@ -1,4 +1,8 @@
 async function getUserPositions(web3, lendPool, userAddress, listOfAssets, userBorrows, userLends) {
+    if (userAddress === null) {
+      //no metamask wallet connected
+      return
+    }
     reservesData = await lendPool.methods.getReservesList().call();
     userReservesData = await lendPool.methods.getUserConfiguration(userAddress).call();
     const binary = parseInt(userReservesData).toString(2)
@@ -8,7 +12,6 @@ async function getUserPositions(web3, lendPool, userAddress, listOfAssets, userB
     for (let i = 0; i < binaryList.length; i++) {
         if (binaryList[i][0] === "1") {
             //User is lending this asset
-            console.log("User lending: ", reservesData[i])
             aTokenAddress = listOfAssets[reservesData[i]].aTokenAddress
             aTokenCon = new web3.eth.Contract(aTokenABI, aTokenAddress)
             assetValue = await aTokenCon.methods.balanceOf(userAddress).call() / 10**18
@@ -17,7 +20,6 @@ async function getUserPositions(web3, lendPool, userAddress, listOfAssets, userB
         }
         if (binaryList[i][1] === "1") {
             //User is borrowing this asset
-            console.log("User Borrowing: ", reservesData[i])
             stableDebtTokenAddress = listOfAssets[reservesData[i]].stableDebtTokenAddress
             variableDebtTokenAddress = listOfAssets[reservesData[i]].variableDebtTokenAddress
             stableDebtTokenCon = new web3.eth.Contract(stableDebtTokenAbi, stableDebtTokenAddress)

@@ -51,13 +51,21 @@ function sortTable(colIndex, columnElement, isNumeric = false) {
         //column should be treated as numeric
         x = parseFloat(x.innerHTML)
         y = parseFloat(y.innerHTML)
+        //if x or y isn't a number, treat it as smaller than any number (end of a descending list)
+        if (Number.isNaN(x)) {
+          x = Number.NEGATIVE_INFINITY; 
+        }
+        if (Number.isNaN(y)) {
+          y = Number.NEGATIVE_INFINITY;
+        }
+
         if (sortOrder === "asc") {
-          if (x > y) {
+          if (x < y) {
             shouldSwitch = true;
             break;
           }
         } else if (sortOrder === "desc") {
-          if (x < y) {
+          if (x > y) {
             shouldSwitch = true;
             break;
           }

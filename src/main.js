@@ -256,9 +256,7 @@ async function withdrawAave(web3, amount) {
 }
 
 //get lending pool function
-async function get_goerli_lending_pool(web3) {
-  let lpapaddress = "0x5E52dEc931FFb32f609681B8438A51c675cc232d"
-  const lpap = new web3.eth.Contract(lending_pool_addresses_provider_abi, lpapaddress)
+async function get_goerli_lending_pool(web3, lpap) {
   const lendPool = (lpap.methods.getLendingPool().call())
   return lendPool
 }
@@ -290,34 +288,47 @@ async function getBorrowableData(web3, lendCon) {
   document.getElementById("health-factor").innerHTML = "Health Factor: " + healthFactor.toFixed(2);
 }
 
-async function getReservesList(web3, marketReservesList) {
-  const poolAddress = await get_goerli_lending_pool(web3)
-  const lendCon = new web3.eth.Contract(lending_pool_abi, poolAddress)
-
+async function getReservesList(lendCon, marketReservesList) {
   marketReservesList.push.apply(marketReservesList, await lendCon.methods.getReservesList().call())
   //console.log(marketReservesList)
   let temp = await lendCon.methods.getUserConfiguration(ethereum.selectedAddress).call()
-  console.log(parseInt(temp, 16).toString(2))
 }
 
-async function asyncOnload(web3) {
-  const poolAddress = await get_goerli_lending_pool(web3)
-  const lendPool = new web3.eth.Contract(lending_pool_abi, poolAddress)
+//import {AaveV2Goerli} from "@bgd-labs/aave-address-book"; //get the Goerli testnet address book
 
-  getBorrowableData(web3, lendPool);
-  await getReservesList(web3, marketReservesList);
-  await getBorrowLendAddresses(listOfAssets, lendPool)
+async function asyncOnload(web3, mainnet_web3) {
+  const lpapAddress = "0x5E52dEc931FFb32f609681B8438A51c675cc232d"
+  //let lpapAddress = addressBook.POOL_ADDRESSES_PROVIDER
+  const lpap = new web3.eth.Contract(lending_pool_addresses_provider_abi, lpapAddress)
+
+  const poolAddress = await get_goerli_lending_pool(web3, lpap)
+  const pdpAddress = "0x927F584d4321C1dCcBf5e2902368124b02419a1E" //goerli v2 pdp address
+  const lendPool = new web3.eth.Contract(lending_pool_abi, poolAddress)
+  const pdp = new web3.eth.Contract(protocolDataProviderABI, pdpAddress)
+
   let userBorrows = []
   let userLends = []
-  getUserPositions(web3, lendPool, ethereum.selectedAddress, listOfAssets, userBorrows, userLends)
-  fillTable(listOfAssets, marketReservesList);
+  await fillAssetList(web3, pdp, listOfAssets, ethereum.selectedAddress, userLends, userBorrows);
+
+  getBorrowableData(web3, lendPool);
+  await getReservesList(lendPool, marketReservesList);
+
+  await getAssetPrices(web3, lpap, listOfAssets)
+  const ethPrice = await getEthPrice(web3)
+  
+  //await getBorrowLendAddresses(listOfAssets, lendPool, pdp)
+  fillMarketBorrowTable("market-borrow-table", listOfAssets, marketReservesList);
+  fillMarketSupplyTable("market-supply-table", listOfAssets, marketReservesList);
+
+  //await getUserPositions(web3, lendPool, ethereum.selectedAddress, listOfAssets, userBorrows, userLends)
+  fillUserLendTable("user-supply-table", listOfAssets, userLends, ethPrice);
+  fillUserBorrowTable("user-borrow-table", listOfAssets, userBorrows, ethPrice);
 }
 
 // Update the table as soon as the website loads
 window.onload = function () {
-  fillAssetList(listOfAssets);
-  asyncOnload(testnet_web3);
+  //fillAssetList(listOfAssets);
+  asyncOnload(testnet_web3, mainnet_web3);
   getChainLinkData(mainnet_web3, listOfAssets);
-  
 };
 

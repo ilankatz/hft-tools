@@ -14,16 +14,18 @@
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css"
     rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-  <script src="./sorttable.js"></script>
+  <script src="./src/sorttable.js"></script>
 
   <link rel="stylesheet" href="./style.css" />
 
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <script type="text/javascript" src="./abis.js"></script>
+  <!-- <script type="text/javascript" src="./node_modules/@bgd-labs/aave-address-book/dist/AaveV2Goerli.js"></script> -->
 
-  <script type="text/javascript" src="./fillTables.js"></script>
-  <script type="text/javascript" src="./getAaveDictionaryData.js"></script>
-  <script type="text/javascript" src="./getUserPositions.js"></script>
+  <script type="text/javascript" src="./src/abis.js"></script>
+
+  <script type="text/javascript" src="./src/fillTables.js"></script>
+  <script type="text/javascript" src="./src/getAaveDictionaryData.js"></script>
+  <script type="text/javascript" src="./src/getUserPositions.js"></script>
 </head>
 
 <body>
@@ -59,30 +61,16 @@
       <div class="your-market-data-box" style="margin-right: 15px">
         <div style="margin-bottom: 15px">  Your Supplies: </div>
         <div class="table-container">
-          <table class="sortable">
+          <table class="sortable" id="user-supply-table">
             <thead>
               <tr>
-                <th onclick="sortTable(0, this)" style="width: 20%;">Asset</th>
-                <th onclick="sortTable(1, this)" style="width: 40%;">Balance</th>
-                <th onclick="sortTable(2, this)" style="width: 40%;">APY</th>
+                <th onclick="sortTable(0, this)" style="width: 15%;">Asset</th>
+                <th onclick="sortTable(1, this)" style="width: 35%;">Balance</th>
+                <th onclick="sortTable(2, this)" style="width: 35%;">Balance (USD)</th>
+                <th onclick="sortTable(3, this)" style="width: 15%;">APY</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>A</td>
-                <td>Z</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>B</td>
-                <td>Y</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>C</td>
-                <td>X</td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -91,30 +79,17 @@
       <div class="your-market-data-box" style="margin-left: 15px">
         <div style="margin-bottom: 15px"> Your Borrows: </div>
         <div class="table-container">
-          <table class="sortable">
+          <table class="sortable" id="user-borrow-table">
             <thead>
               <tr>
-                <th onclick="sortTable(0, this)" style="width: 20%;">Asset</th>
-                <th onclick="sortTable(1, this)" style="width: 40%;">Balance</th>
-                <th onclick="sortTable(2, this)" style="width: 40%;">APY</th>
+                <th onclick="sortTable(0, this)" style="width: 15%;">Asset</th>
+                <th onclick="sortTable(1, this)" style="width: 20%;">Borrow Type</th>
+                <th onclick="sortTable(2, this, true)" style="width: 25%;">Balance</th>
+                <th onclick="sortTable(3, this, true)" style="width: 30%;">Balance (USD)</th>
+                <th onclick="sortTable(4, this, true)" style="width: 15%;">APY</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>A</td>
-                <td>Z</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>B</td>
-                <td>Y</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>C</td>
-                <td>X</td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -126,31 +101,17 @@
     <div class="market-box-container">
       <div class="all-market-data-box" style="margin-right: 15px">
         <div style="margin-bottom: 15px"> Supply Market: </div>
-        <div class="table-container">
+        <div class="table-container" id="market-supply-table">
           <table class="sortable">
             <thead>
               <tr>
                 <th onclick="sortTable(0, this)" style="width: 20%;">Asset</th>
-                <th onclick="sortTable(1, this)" style="width: 40%;">Balance</th>
-                <th onclick="sortTable(2, this)" style="width: 40%;">APY</th>
+                <th onclick="sortTable(1, this, true)" style="width: 35%;">Balance</th>
+                <th onclick="sortTable(2, this, true)" style="width: 35%;">APY</th>
+                <th onclick="sortTable(3, this)" style="width: 10%;">Can be collateral</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>A</td>
-                <td>Z</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>B</td>
-                <td>Y</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>C</td>
-                <td>X</td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -163,8 +124,8 @@
             <thead>
               <tr>
                 <th onclick="sortTable(0, this)" style="width: 20%;">Asset</th>
-                <th onclick="sortTable(1, this, true)" style="width: 40%;">Balance</th>
-                <th onclick="sortTable(2, this, true)" style="width: 40%;">APY</th>
+                <th onclick="sortTable(1, this, true)" style="width: 40%;">Stable Debt APY</th>
+                <th onclick="sortTable(2, this, true)" style="width: 40%;">Variable Debt APY</th>
               </tr>
             </thead>
             <tbody>
@@ -271,7 +232,8 @@
   </div>
 
   <!-- <script type="text/javascript" src="./main.js"></script> -->
-  <script type="module" src="./main.js"></script>
+  <script type="module" src="./src/main.js"></script>
+  <!-- <script type="module" src="./webpack_main.js"></script> -->
 </body>
 
 </html>
